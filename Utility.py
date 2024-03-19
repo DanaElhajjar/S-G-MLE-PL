@@ -1,4 +1,11 @@
+# --------------------------------------------------------------------------------------------------
+# import librairies 
+# --------------------------------------------------------------------------------------------------
+import numpy as np
 
+# --------------------------------------------------------------------------------------------------
+# functions
+# --------------------------------------------------------------------------------------------------
 def ToeplitzMatrix(rho, p):
     """ A function that computes a Hermitian semi-positive matrix.
             Inputs:
@@ -8,25 +15,20 @@ def ToeplitzMatrix(rho, p):
                 * the matrix """
 
     return sp.linalg.toeplitz(np.power(rho, np.arange(0, p)))
-    # sp.linalg.toeplitz : Construct a Toeplitz matrix.
 
-def CRB_Covar_Gaussian_Real(𝚺,echelle):
-    "CRB Covar Matrix - Gaussian Data"
+def add_one_obs(past_matrix, new_past_line_vector, new_value):
+    """ A function that adds one observation to a covariance matrix, incorporating information from a new image.
+            Inputs:
+                * past_matrix = covariance matrix of the past images
+                * new_past_line_vector = vector of the covariance betwwen the past images and the new one
+                * new_value = a scalar representing the variance of the new image
 
-    m=𝚺.shape[0]
-    # N=echelle.shape
-    𝚺_inv = inv(𝚺)
-
-    # Construction basis
-    𝛀 = basis_euc_sym_mat_real(m)
-    M = 𝛀.shape[2] 
-
-    # Construction de la FIM
-    F=np.zeros((M,M))
-    for i in range(M):
-        for j in range(M):
-            F[i,j]=np.matrix.trace(𝚺_inv@𝛀[:,:,i]@𝚺_inv@𝛀[:,:,j])
-
-    # CRB_Gaussian=np.zeros(N)
-    CRB_Gaussian=2*np.matrix.trace(inv(F))/echelle
-    return(CRB_Gaussian)
+            Outputs:
+                * the merged covariance matrix """
+    p = past_matrix.shape[0]
+    C_tilde = np.zeros((p+1, p+1), dtype=np.complex128)
+    C_tilde[0:p, 0:p] = past_matrix
+    C_tilde[p, 0:p] = new_past_line_vector
+    C_tilde[0:p, p] = new_past_line_vector.conj().T
+    C_tilde[p, p] = new_value
+    return C_tilde

@@ -36,7 +36,7 @@ def Gaussian_new_obs_sequential_BCD(X, X_past, x_newdata, C, diag_w_past, iter_P
     inv_C = np.linalg.inv(C)
     S = SCM(X) # Initialise estimate to SCM
     S = np.asarray(S, dtype=np.complex128)
-    w_past = np.diag(diag_w_past) # diagonal matrix of vector past w_theta 
+    w_past = np.diag(diag_w_past) # vector of past w_theta 
     new_w_theta =np.array(1) # initialize the new w_theta to 1
     Sigma = ToeplitzMatrix(0.5, p+k) # initialize the coherence matrix to a Toeplitz
     new_past_coherence = Sigma[p, 0:p] # extract the the vector of coherence between the past imagesand the new ones

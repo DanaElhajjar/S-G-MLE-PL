@@ -4,12 +4,30 @@
 import numpy as np
 import warnings
 
+from Utility import (add_one_obs,
+                        phasecorrection3,
+                            phasecorrection4)
+
 
 # --------------------------------------------------------------------------------------------------
 # Functions
 # --------------------------------------------------------------------------------------------------
 
 def Gaussian_complex_theta_recursif(X, X_past, x_newdata, C, diag_w_past, iter_PL, iter_max_BCD, phasecorrectionchoice, tol=0.001):
+    """ A function that implements the block coordinate descent algorithm (BCD) 
+            Inputs:
+                * X : a vector of size (p+1, n)
+                * X_past : a vector of size (p, n)
+                * x_newdata : a vector of size (1, n)
+                * C : covariance matrix of X_past (already estimated)
+                * diag_w_past : diagonal matrix of the vector w_theta (already estimated)
+                * iter_PL : a scalar
+                * iter_max_BCD : a scalar
+                * phasecorrectionchoice : a scalar
+                * tol : a scalar
+            Outputs:
+                * C_tilde : estimated covariance matrix of X
+                * new_theta : a scalar representing the phase of the new image """
     # initialization
     stop_cond = np.inf
     iteration = 0
@@ -71,11 +89,11 @@ def Gaussian_complex_theta_recursif(X, X_past, x_newdata, C, diag_w_past, iter_P
 
     # corrections
     if phasecorrectionchoice == 3:
-        new_phase = phasecorrection3(C_tilde)
-        res = new_phase[-1]
-        return C_tilde, res
+        new_phases = phasecorrection3(C_tilde)
+        new_theta = new_phases[-1]
+        return C_tilde, new_theta
     elif phasecorrectionchoice == 4:
         Sigma = (((diag_w.conj().T).dot(S)).dot(diag_w)).real
-        new_phase = phasecorrection4(C_tilde, Sigma)
-        res = new_phase[-1]
-        return C_tilde, res
+        new_phases = phasecorrection4(C_tilde, Sigma)
+        new_theta = new_phases[-1]
+        return C_tilde, new_theta

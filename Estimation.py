@@ -9,7 +9,7 @@ import numpy as np
 def SCM(X):  
     """ A function that computes the ML Estimator for covariance matrix estimation for gaussian data
         Inputs:
-            * 𝐗 = a matrix of size p*N with each observation along column dimension
+            * X = a matrix of size p*N with each observation along column dimension
         Outputs:
             * sigma_mle = the ML estimate"""
     p = X.shape[0]

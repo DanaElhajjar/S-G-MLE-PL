@@ -8,20 +8,6 @@ import warnings
 # --------------------------------------------------------------------------------------------------
 # Functions
 # --------------------------------------------------------------------------------------------------
-def SCM(X):  
-    """ A function that computes the ML Estimator for covariance matrix estimation for gaussian data
-        Inputs:
-            * 𝐗 = a matrix of size p*N with each observation along column dimension
-        Outputs:
-            * sigma_mle = the ML estimate"""
-    p = X.shape[0]
-    n = X.shape[1] 
-
-    # initialization
-    sigma_mle = np.zeros((p, p)) 
-  
-    sigma_mle = (X@X.conj().T) / n 
-return sigma_mle
 
 def Gaussian_complex_theta_recursif(X, X_past, x_newdata, C, diag_w_past, iter_PL, iter_max_BCD, phasecorrectionchoice, tol=0.001):
     # initialization

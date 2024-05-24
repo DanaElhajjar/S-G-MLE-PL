@@ -19,7 +19,7 @@ def SCM(X):
     sigma_mle = np.zeros((p, p)) 
   
     sigma_mle = (X@X.conj().T) / n 
-return sigma_mle
+    return sigma_mle
 
 def phasecorrection3(covmatrix): 
     """

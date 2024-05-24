@@ -5,6 +5,8 @@ This repository is dedicated to the implementation of Sequential Gaussian Phase 
 The repository provides reproduction of the results presented in the paper:
 > Dana EL HAJJAR, Yajing YAN, Guillaume GINOLHAC, an Mohammed Nabil EL KORSO, "SEQUENTIAL PHASE LINKING : PROGRESSIVE INTEGRATION OF SAR IMAGES FOR OPERATIONAL PHASE ESTIMATION", IGARSS 2024
 
+If you use any of the code or data provided here, please cite the above paper.
+
 ## Code organisation
 
 ## Environment
@@ -14,6 +16,15 @@ A conda environment is provided in the file `environment.yml` To create and use 
 ```console
 conda env create -f environment.yml
 conda activate s-g-mle-pl
+```
+
+## Dataset
+
+For real-world example, you need to download the dataset and decompress it into `data` folder:
+
+```console
+wget https://zenodo.org/records/11283419/files/Sentinel1_timeseries_mexico_interfero.zip?download=1
+unzip data.zip data/
 ```
 
 ### Reproducing the results of the paper
@@ -26,8 +37,10 @@ conda activate s-g-mle-pl
 
 ### Authors
 
-* Dana El Hajjar, mail:
-* Yajing Yan
+* Dana El Hajjar, mail: dana.el-hajjar@univ-smb.fr
+* Yajing Yan, mail: yajing.yan@univ-smb.fr
+* Guillaume Ginolhac, mail: guillaume.ginolhac@univ-smb.fr
+* Mohammed Nabil El Korso, mail: mohammed.nabil.el-korso@centralesupelec.fr
 ...
 
 Copyright @Université Savoie Mont Blanc, 2024

@@ -9,18 +9,19 @@ If you use any of the code or data provided here, please cite the above paper.
 
 ## Code organisation
 
-- |__ src
-    - |__ __init.py__
-    - |__ estimation.py
-    - |__ generation.py
-    - |__ optimization.py
-    - |__ real_data.py
-    - |__ simulation.py
-    - |__ utility.py
-- |__ environment.yml
-- |__ mse_simulation.py
-- |__ README.md
-- |__ realdata_interferogram.py
+|__ src
+    |__ __init.py__
+    |__ estimation.py
+    |__ generation.py
+    |__ optimization.py
+    |__ real_data.py
+    |__ simulation.py
+    |__ utility.py
+|__ environment.yml
+|__ mse_simulation.py
+|__ README.md
+|__ realdata_interferogram.py
+
 
 ## Environment
 

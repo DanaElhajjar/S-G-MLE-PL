@@ -9,6 +9,7 @@ If you use any of the code or data provided here, please cite the above paper.
 
 ## Code organisation
 
+<pre>
 |__ src <br>
     |__ __init.py__ <br>
     |__ estimation.py <br>
@@ -23,6 +24,8 @@ If you use any of the code or data provided here, please cite the above paper.
     |__ realdata_interferogram.py <br>
 |__ environment.yml <br>
 |__ README.md <br>
+</pre>
+
 
 The main code for the methods is provided in src/ directory. The file optimization.py provides the function for the S-G-MLE-PL algorithm. The folder exp/ provides the simulations and the folder rd/ contains the processing on the real data. The data/ directory is used to store the dataset used. 
 

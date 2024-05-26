@@ -1,6 +1,6 @@
 from src.generation import phasegeneration, simulateCov
 from src.utility import ToeplitzMatrix, calculateMSE
-from src.simulation import parallel_Monte_Carlo
+from exp.simulation import parallel_Monte_Carlo
 
 import numpy as np
 import matplotlib.pyplot as plt

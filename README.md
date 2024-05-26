@@ -9,18 +9,22 @@ If you use any of the code or data provided here, please cite the above paper.
 
 ## Code organisation
 
-|__ src
-    |__ __init.py__
-    |__ estimation.py
-    |__ generation.py
-    |__ optimization.py
-    |__ real_data.py
-    |__ simulation.py
-    |__ utility.py
-|__ environment.yml
-|__ mse_simulation.py
-|__ README.md
-|__ realdata_interferogram.py
+|__ src <br>
+    |__ __init.py__ <br>
+    |__ estimation.py <br>
+    |__ generation.py <br>
+    |__ optimization.py <br>
+    |__ utility.py <br>
+|__ exp <br>
+    |__ simulation.py <br>
+    |__ mse_simulation.py <br>
+|__ rd <br>
+    |__ real_data.py <br>
+    |__ realdata_interferogram.py <br>
+|__ environment.yml <br>
+|__ README.md <br>
+
+The main code for the methods is provided in src/ directory. The file optimization.py provides the function for the S-G-MLE-PL algorithm. The folder exp/ provides the simulations and the folder rd/ contains the processing on the real data. The data/ directory is used to store the dataset used. 
 
 
 ## Environment
@@ -43,11 +47,11 @@ unzip data.zip data/
 
 ### Reproducing the results of the paper
 
-| Command                           | Figure | Parameters                  |
-|-----------------------------------|--------|-----------------------------|
-| `python mse_simulation [OPTIONS]` |   2    | n, l, rho, number of trials |
-|                                   |        |                             |
-| `python real data `               |   3    | n, l                        |
+| Command                             | Figure | Parameters                       |
+|-------------------------------------|--------|----------------------------------|
+| `python mse_simulation [OPTIONS]`   |   2    | n, l, rho, number of trials      |
+| `python computation_time [OPTIONS]` |   3    | n, p_list, rho, number of trials |
+| `python real data [OPTIONS]`        |   4    | n, l                             |
 
 ### Authors
 

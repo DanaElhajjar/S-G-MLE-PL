@@ -1,5 +1,5 @@
 from data import *
-from src.real_data import process_images
+from rd.real_data import process_images
 from src.utility import writetoENVIformat
 
 import numpy as np

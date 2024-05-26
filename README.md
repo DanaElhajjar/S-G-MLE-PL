@@ -9,6 +9,17 @@ If you use any of the code or data provided here, please cite the above paper.
 
 ## Code organisation
 
+- src
+    - __init.py__
+    - estimation.py
+    - generation.py
+    - optimization.py
+    - real_data.py
+    - simulation.py
+    - utility.py
+- mse_simulation.py
+- realdata_interferogram.py
+
 ## Environment
 
 A conda environment is provided in the file `environment.yml` To create and use it run:
@@ -31,9 +42,9 @@ unzip data.zip data/
 
 | Command                           | Figure | Parameters                  |
 |-----------------------------------|--------|-----------------------------|
-| `python mse_simulation [OPTIONS]` | 2      | n, l, rho, number of trials |
+| `python mse_simulation [OPTIONS]` |   2    | n, l, rho, number of trials |
 |                                   |        |                             |
-|                                   |        |                             |
+| `python real data `               |   3    | n, l                        |
 
 ### Authors
 
@@ -41,6 +52,6 @@ unzip data.zip data/
 * Yajing Yan, mail: yajing.yan@univ-smb.fr
 * Guillaume Ginolhac, mail: guillaume.ginolhac@univ-smb.fr
 * Mohammed Nabil El Korso, mail: mohammed.nabil.el-korso@centralesupelec.fr
-...
+
 
 Copyright @Université Savoie Mont Blanc, 2024

@@ -14,7 +14,7 @@ from .estimation import (
 # Functions
 # --------------------------------------------------------------------------------------------------
 
-def S_G_MLE_PL_BCD(X, X_past, x_newdata, C, diag_w_past, iter_PL, iter_max_BCD, phasecorrectionchoice, tol=0.001):
+def S_G_MLE_PL_BCD(X, X_past, x_newdata, C, diag_w_past, iter_max_BCD, phasecorrectionchoice, tol=0.001):
     """ A function that implements the block coordinate descent algorithm (BCD) 
             Inputs:
                 * X : a vector of size (p+1, n)

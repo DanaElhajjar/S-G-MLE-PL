@@ -3,7 +3,7 @@
 This repository is dedicated to the implementation of Sequential Gaussian Phase Linking based on Maximum Likelihood Estimation (S-G-MLE-PL). This approach aims to estimate the phase of a new SAR image based on a block of past images.
 
 The repository provides reproduction of the results presented in the paper:
-> Dana EL HAJJAR, Yajing YAN, Guillaume GINOLHAC, an Mohammed Nabil EL KORSO, "SEQUENTIAL PHASE LINKING : PROGRESSIVE INTEGRATION OF SAR IMAGES FOR OPERATIONAL PHASE ESTIMATION", IGARSS 2024
+> Dana EL HAJJAR, Yajing YAN, Guillaume GINOLHAC, and Mohammed Nabil EL KORSO, "SEQUENTIAL PHASE LINKING : PROGRESSIVE INTEGRATION OF SAR IMAGES FOR OPERATIONAL PHASE ESTIMATION", IGARSS 2024
 
 If you use any of the code or data provided here, please cite the above paper.
 

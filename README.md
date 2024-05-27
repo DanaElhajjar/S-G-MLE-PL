@@ -9,22 +9,20 @@ If you use any of the code or data provided here, please cite the above paper.
 
 ## Code organisation
 
-<pre>
-|__ src <br>
-    |__ __init.py__ <br>
-    |__ estimation.py <br>
-    |__ generation.py <br>
-    |__ optimization.py <br>
-    |__ utility.py <br>
-|__ exp <br>
-    |__ simulation.py <br>
-    |__ mse_simulation.py <br>
-|__ rd <br>
-    |__ real_data.py <br>
-    |__ realdata_interferogram.py <br>
-|__ environment.yml <br>
-|__ README.md <br>
-</pre>
+├── environment.yml
+├── exp
+│   ├── mse_simulation.py
+│   └── simulation.py
+├── rd
+│   ├── realdata_interrferogram.py
+│   └── real_data.py
+├── README.md
+└── src
+    ├── estimation.py
+    ├── generation.py
+    ├── __init__.py
+    ├── optimization.py
+    └── utility.py
 
 
 The main code for the methods is provided in src/ directory. The file optimization.py provides the function for the S-G-MLE-PL algorithm. The folder exp/ provides the simulations and the folder rd/ contains the processing on the real data. The data/ directory is used to store the dataset used. 

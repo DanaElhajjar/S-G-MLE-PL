@@ -1,3 +1,6 @@
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from src.estimation import extractMLEfunc, MLE_PL, SCM
 from src.optimization import S_G_MLE_PL_BCD
 from src.generation import sampledistributionchoice
@@ -35,19 +38,19 @@ def oneMonteCarlo(p, n, trueCov, sampledist, rank, argsMLEPL, number_of_trials, 
     S = SCM(X)
     C = SCM(X_past)
     C = np.asarray(C, dtype=np.complex128)
-    _, _, diag_w_past = MLE_PL(X_past, 
+    _, _, diag_w_past, _ = MLE_PL(X_past, 
                                'Gaussian', 
                                'Cor-Arg', 
                                rank, 
                                argsMLE)
     # MLE-PL (offline)
-    _, new_deltaphase = extractMLEfunc(X, 
+    _, new_deltaphase, _, _ = extractMLEfunc(X, 
                                        'Gaussian', 
                                        'Cor-Arg', 
                                        rank, 
                                        argsMLE)
     # classic PL (offline)
-    _, new_deltaphase_classic_PL = extractMLEfunc(X, 
+    _, new_deltaphase_classic_PL, _, _ = extractMLEfunc(X, 
                                                   'Gaussian', 
                                                   'Mod-Arg', 
                                                   rank, 

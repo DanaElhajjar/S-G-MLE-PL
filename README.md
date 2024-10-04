@@ -13,7 +13,7 @@ If you use any of the code or data provided here, please cite the above paper.
 ├── exp<br>
 │   ├── mse_simulation.py<br>
 │   └── simulation.py<br>
-├── rd<br>
+├── real_data<br>
 │   ├── realdata_interrferogram.py<br>
 │   └── real_data.py<br>
 ├── README.md<br>

@@ -1,4 +1,5 @@
 import os
+import sys
 import numpy as np
 from osgeo import gdal
 from multiprocessing import Pool
@@ -6,6 +7,7 @@ import matplotlib.pyplot as plt
 from functools import partial
 from tqdm import tqdm
 
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from src.estimation import extractMLEfunc, SCM
 from optimization import S_G_MLE_PL_BCD
 

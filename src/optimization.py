@@ -4,7 +4,9 @@
 import numpy as np
 import warnings
 
-from .utility import add_one_obs, ToeplitzMatrix
+from .utility import (
+    add_one_obs, 
+    ToeplitzMatrix)
 from .estimation import (
     phasecorrection3,
     phasecorrection4,

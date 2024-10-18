@@ -1,0 +1,15 @@
+\vspace{-5pt} 
+\section{Introduction}
+\label{sec:intro}
+\vspace{-5pt} 
+
+In recent decades, remote sensing community has witnessed remarkable revolutions in terms of monitoring ground surface deformations over time thanks to the increasing number of \ac{MT-InSAR} analysis \citep{osmanouglu2016time}. This advancement results from the evolution of the large amount of  available \acs{SAR} images due to the growing number of launched \acs{SAR} satellites. One crucial family of approach in \acs{MT-InSAR} analysis is \ac{DSI} which exploits groups of homogeneous scatterers called \ac{DS}. 
+Among the multiple \acs{DSI} approaches, \ac{PL} exploits all possible combinations of \acs{SAR} images. A set of \acs{PL} algorithms
+have been developped among which we can mention: SqueeSAR \citep{ferretti2011new}, \ac{EMI} \citep{ansari2018efficient}, \ac{MLEPL} \citep{vu2023robust, 9763551}. The main advantage of these approaches is that they consider target statistics through the coherence of interferograms in a rigorous mathematical framework and they allow avoiding phase bias induced by short-lived fading signals present in short temporal baseline interferograms \citep{ansari2020study}.
+
+Thanks to the ongoing and upcoming \acs{SAR} missions coupled with small revisit cycles (e.g., Sentinel-1 mission $6-12$ days), it becomes possible to acquire unprecedented volumes of \acs{SAR} data. Moreover, achieving \ac{NRT} monitoring has become a promising goal of \acs{InSAR} applications, especially for its use in early warnings systems. Traditional \acs{MT-InSAR} would be unable to incorporate efficiently the newly acquired data and may require replaying the algorithm on the whole dataset. The literature has, to the best of our knowledge, not extensively explored sequential processing of \acs{SAR} data, as indicated by the limited number of studies addressing this specific topic exploiting \acs{PL} approaches. The most known sequential approach was developed in \citep{ansari2017sequential} where the main idea is to partition the entire stack of \acs{SAR} images into $m$ mini-stacks. The algorithm starts by treating the first mini-stack and then compressing it into a single virtual image through \ac{PCA}. The virtual image obtained is then connected to the next mini-stack, and so on. This approach requires an extended period to form the adequate mini-stack and is based on the standard \acs{PL}. 
+
+In this work, we are interested in developing a sequential approach based on the joint \acs{MLE} proposed in \citep{vu2023robust} which presents better performance and has the ability to deal with non-Gaussian data distribution. The previous image stack is taken as prior information, and our approach retrieve the distribution of the new image conditionally to this previous stack. 
+The coherence and the phase difference of the new image with respect to the reference are retrieved using a \ac{BCD} algorithm.
+The relevance of the proposed approach is first assessed on synthetic simulations, then on $20$ Sentinel-$1$ \acs{SAR} images acquired between $14$ August $2019$ and $10$ April $2020$ over Mexico city. 
+

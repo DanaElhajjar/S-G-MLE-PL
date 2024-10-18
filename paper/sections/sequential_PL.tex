@@ -1,0 +1,171 @@
+\vspace{-5pt} 
+\section{Sequential Phase Linking}
+\label{sec:approach}
+\vspace{-5pt} 
+We consider a stack of $l = p+1$ \acs{SAR} images, for a given pixel, we denote $\{\mathbf{\tilde{x}}^i\}_{i=1}^n$ the local homogeneous spatial neighborhood of size $n$, where $\mathbf{\tilde{x}}^i \in \mathbb{C}^{l}$, for all $i \in [\![1,n]\!]$, i.e., 
+\vspace{-7pt} 
+\begin{equation}
+    \mathbf{\tilde{x}}^i = [\underbrace{x_1^i, \dots, x_p^i}_{\mathbf{x}^i}, x_{l}^i ]^T \in \mathbb{C}^{l}
+\end{equation}
+where $\mathbf{x}^i \in \mathbb{C}^{p}$ denotes the multivariate pixel of the previous data (Fig. \ref{fig:datacube}). Each pixel of the local patch is assumed to be distributed as a zero mean \ac{CCG} \citep{bamler1998synthetic}, i.e., $\mathbf{\tilde{x}}\sim\mathcal{CN}(0, \mathbf{\tilde{\Sigma}})$. 
+
+\begin{figure}[hbt]
+    \centering
+\resizebox{\linewidth}{!}{\input{./tikz/data}}
+\caption{\small \acs{SAR} data representation including both previous and recently obtained images. The local neighborhood of size $n$ is denoted by gray pixels (sliding window). }
+\label{fig:datacube}
+\end{figure}
+\vspace{-5pt} 
+\subsection{Background}
+\label{sssec:background}
+Taking into account the phase closure property of the InSAR stack, the covariance matrix of SAR images adheres to the following structure: 
+\vspace{-7pt} 
+\begin{equation}
+\label{cov_mat_struc}
+   \mathbf{\tilde{\Sigma}} = \mathbf{\tilde{\Psi}} \odot \mathbf{\tilde{w}}_{\mathbf{\theta}}\mathbf{\tilde{w}}_{\mathbf{\theta}}^H
+\end{equation}
+\vspace{-2pt} 
+where the symbol $\odot$ represents the element-wise (Hadamard) multiplication, the exponent $^H$ is the transposed and complex conjugated operator (Hermitian), $\mathbf{\tilde{\Psi}}$ is the real core of the covariance matrix and $\mathbf{\tilde{w}}_{\mathbf{\theta}}$ denotes the vector of the exponential of the complex phases ($\mathbf{\tilde{w}}_{\mathbf{\theta}}=[e^{j \theta_0}, \dots,e^{j \theta_{l}}]$). The main idea of \acs{PL} is to estimate $\mathbf{\tilde{\Sigma}}$ which amounts to estimate $\mathbf{\tilde{\Psi}}$ and $\mathbf{\tilde{w}}_{\mathbf{\theta}}$ since the covariance matrix is connected to the unknown coherence matrix and phases, according to (\ref{cov_mat_struc}). 
+\acs{PL} algorithms are summarized in \citep{10261889} and compared mathematically in \citep{cao2015mathematical}.  
+The standard \acs{PL} consists of $2$ steps : \textit{i}) computing the \ac{SCM} over a local patch of the image and then \textit{ii}) considering the plug-in estimate of the coherence matrix $\mathbf{\tilde{\Psi}} = |\acs{SCM}|$ and solving the following optimization problem
+\begin{gather}
+\label{eq:classic_phaselinking}
+    \begin{array}{cl}
+    \underset{\mathbf{\tilde{w}}_{\mathbf{\theta}}}{\rm minimize}
+    & 
+    \mathcal{L}(|\acs{SCM}| \odot \mathbf{\tilde{w}}_{\mathbf{\theta}}\mathbf{\tilde{w}}_{\mathbf{\theta}}^H)
+    \end{array}
+\end{gather}
+where $\mathcal{L}$ corresponds to the negative log-likelihood function of the data following the zero mean \ac{CCG} distribution.
+This $2$-step approach relies on the plug-in estimate of the coherence matrix which renders it non optimal due to the bias associated with this plug-in. That is why \citep{vu2022new, vu2023robust} proposed to estimate jointly $\mathbf{\tilde{\Psi}}$ and $\mathbf{\tilde{w}}_{\mathbf{\theta}}$. 
+Therefore, the optimization problem transforms into
+\begin{equation}
+\label{eq:MLE_phaselinking}
+    \begin{array}{cl}
+    \underset{\mathbf{\tilde{w}}_{\mathbf{\theta}}}{\rm minimize}
+    & 
+    \mathcal{L}(\mathbf{\tilde{\Psi}} \odot \mathbf{\tilde{w}}_{\mathbf{\theta}}\mathbf{\tilde{w}}_{\mathbf{\theta}}^H)
+    \\
+    \text{ subject to}
+    & 
+    \mathbf{\tilde{\Psi}} \; \text{real, } \; \mathbf{\tilde{w}}_{\theta} \in \mathbb{T}_{l} \text{,} \; , \; \theta_1 = 0 %\mathbf{\tilde{w}}_0 = 1 
+    \end{array}
+\end{equation} 
+where $\mathbb{T}_l = \left\{\mathbf{\tilde{w}} \in \mathbb{C}^{l} | \, |[\tilde{w}]_i| = 1, \forall i \in [1, l]\right\}$ is the $l$-torus of phase only complex vectors.
+\vspace{-5pt} 
+\subsection{Covariance matrix structure with new data}
+\label{sssec:cov_structure}
+The hermitian structured covariance matrix, given in (\ref{cov_mat_struc}), can be rewritten as 
+\begin{equation}
+\label{cov_mat_struc_block}
+    \mathbf{\tilde{\Sigma}} = \left( \begin{array}{c}
+        \begin{tabular}{ccc}
+        \multicolumn{2}{c}{\multirow{2}{*}{\huge{\Sigma}}} &  \\
+            \multicolumn{2}{c}{} & $w_{\theta_{l}}^* diag(\mathbf{w}_{\theta})\boldsymbol{\gamma}^T $  \\
+                &     $\boldsymbol{\gamma} diag(\mathbf{w}_{\theta})^H w_{\theta_{l}}$    & $\gamma_{l}$\\ % \exp^{(j \theta_{l})}
+        \end{tabular}
+        \end{array} \right)
+\end{equation}
+where the exponent $ ^*$ is the conjugated operator, $\mathbf{\Sigma}$ denotes the previously estimated covariance matrix between the previous \ac{SAR} images, $\boldsymbol{\gamma}$ corresponds to the coherence vector between the newly acquired data and the previous ones, $\gamma_{l}$ represents the variance of the newly acquired data,  and $w_{\theta_{l}}$ is the exponential of the phase of the latest data. We note that $3$ parameters associated with the new image are unknown and the remaining are estimated based on the methodology presented in \citep{vu2023robust}. These parameters will be represented by hats to indicate that they have already been estimated.
+\vspace{-5pt} 
+\subsection{\ac{MLE} problem}
+\label{sssec:MLE_prob}
+Considering the covariance matrix structure in (\ref{cov_mat_struc_block}) and assuming that $\{\mathbf{\tilde{x}}^i\}_{i=1}^n$ follows a \acs{CCG} distribution, the associated negative log-likelihood for the entire data set, can be expressed as:
+\vspace{-20pt} 
+\begin{equation}
+\label{log_likelihood_eq}
+\begin{aligned}
+    \mathcal{L}_G(\boldsymbol{\gamma}, \gamma_{l}, w_{\theta_{l}}) &= - \sum_{i=1}^n \mathcal{L}_G^i(x_{p+1}^i | \mathbf{x}^i; \boldsymbol{\gamma}, \gamma_{l}, w_{\theta_{l}}) + \mathcal{L}_G^i(\mathbf{x}^i) \\
+\end{aligned}
+\end{equation}
+According to \citep{anderson1958introduction}, % \citep{petersen2008matrix},
+$x_{p+1}^i|\mathbf{x}^i \sim \mathcal{CN}(\mu_x^i, \sigma^2_x)$ 
+where \\ 
+$\mu_x^i = w_{\theta_{l}} \boldsymbol{\gamma} \text{diag}(\hat{\mathbf{w}}_{\theta})^H\hat{\mathbf{\Sigma}}^{-1} \mathbf{x}^i$ \\
+and $\sigma^2_x = \gamma_l - \boldsymbol{\gamma} \text{diag}(\hat{\mathbf{w}}_{\theta})^H \hat{\mathbf{\Sigma}}^{-1}  \text{diag}(\hat{\mathbf{w}}_{\theta}^H) \boldsymbol{\gamma}^T$, and the negative log-likelihood in (\ref{log_likelihood_eq}), can be formulated as 
+
+\begin{equation}
+\label{log_likelihood_eq_final}
+\begin{aligned}
+    \mathcal{L}_G(\boldsymbol{\gamma}, \gamma_{l}, w_{\theta_{l}}) &\propto n \log\left( v \right) + \sum_{i=1}^n \frac{y^{i*} y^i}{v}.
+\end{aligned}
+\end{equation}
+
+where $y^i = x_{l}^i - w_{\theta_{l}} \, \boldsymbol{\gamma} \, \text{diag}(\hat{\mathbf{w}}_{\theta})^H \hat{\mathbf{\Sigma}}^{-1} \mathbf{x}^i$ \\
+and $v = \gamma_{l} - \boldsymbol{\gamma} \, \text{diag}(\hat{\mathbf{w}}_{\theta})^H \hat{\mathbf{\Sigma}}^{-1} \text{diag}(\hat{\mathbf{w}}_{\theta}) \boldsymbol{\gamma}^T$
+
+In this work, we propose to estimate simultaneously the coherence and the new phase difference using the covariance matrix structure (\ref{cov_mat_struc_block}), 
+\vspace{-10pt} 
+\begin{equation}
+\begin{aligned}
+\min_{\boldsymbol{\gamma}, \gamma_{l}, \theta_{l}} \quad & \mathcal{L}_G(\boldsymbol{\gamma}, \gamma_{l}, w_{\theta_{l}}) \\
+\text{subject to} \quad & \boldsymbol{\gamma}, \gamma_{l} \; \text{real}, \; |w_{\theta_{l}}| = 1 , \; \theta_1 = 0
+%& \gamma_{l} \; \text{real} \\
+\end{aligned}
+\end{equation}
+The optimization of $\mathcal{L}_G$, defined in (\ref{log_likelihood_eq}), will be addressed in a unified manner using a \acs{BCD} algorithm. The main idea of this algorithm involves estimating each parameter iteratively  while fixing the others. Thus, each update corresponds to an optimization sub-problem (cf. Algorithm \ref{Algorithm:algo_BCD}). 
+\vspace{-10pt} 
+\subsubsection*{Update $\boldsymbol{\gamma}$}
+Let us start by updating $\boldsymbol{\gamma}$ by solving the following sub-problem %as in (\ref{Equation:problem2})
+\begin{equation}
+\label{Equation:problem2}
+\min_{\boldsymbol{\gamma}} \quad  \mathcal{L}_G(\boldsymbol{\gamma}) \quad 
+\text{s.t.} \quad  \boldsymbol{\gamma} \; \text{real}
+\end{equation}
+This optimization can be analytically solved as %results is an analytical solution for the update as
+\begin{equation}
+\label{Equation:gamma_vector}
+\resizebox{\columnwidth}{!}{$
+\small \boldsymbol{\gamma} = \small \left(\sum_{i=1}^n w_{\theta_{l}}^* x_{l}^i \mathbf{L}^i - w_{\theta_{l}} x_{l}^{i*} \mathbf{L}^{i*}  \right) . \left(\sum_{i=1}^n \mathbf{M}^i + \mathbf{M}^{i*} \right)^{-1}
+$}
+\end{equation}
+where $\small \mathbf{L}^i = \small \mathbf{x}^{iH} \hat{\mathbf{\Sigma}}^{-1} \text{diag}(\hat{\mathbf{w}}_{\theta})$ and $\small \mathbf{M}^i = \small \mathbf{L}^{iH} \mathbf{L}^i$
+%\small \text{diag}(\mathbf{w}_{\theta})^H \mathbf{C}^{-1}\mathbf{x^i}\mathbf{x^{iH}} \mathbf{C}^{-1} \text{diag}(\mathbf{w}_{\theta})$
+\vspace{-10pt} 
+\subsubsection*{Update $\gamma_{l}$}
+$\gamma_{l}$ is updated by minimizing $\mathcal{L}_G$ while fixing $\boldsymbol{\gamma}$ and $w_{\theta_l}$
+\vspace{-10pt} 
+\begin{equation}
+\min_{\gamma_{l}} \quad  \mathcal{L}_G(\gamma_{l}) \quad 
+\text{s.t.} \quad  \gamma_{l} \; \text{real}
+\end{equation} 
+\vspace{-5pt} 
+The variance of the newly acquired data is calculated as
+\begin{equation}
+\label{Equation:gamma_scalar}
+\resizebox{\columnwidth}{!}{$
+\small \gamma_l = \small \frac{1}{n} \sum_{i=1}^{n} (x_{l}^i - w_{\theta_{l}} \boldsymbol{\gamma} \mathbf{L}^{iH})^*(x_{l}^i - w_{\theta_{l}} \boldsymbol{\gamma} \mathbf{L}^{iH}) \\
+    +  \boldsymbol{\gamma} \mathbf{N} \boldsymbol{\gamma}^T 
+$}
+\end{equation}
+\vspace{-10pt} 
+where $\small \mathbf{N} = \small \text{diag}(\hat{\mathbf{w}}_{\theta})^H \hat{\mathbf{\Sigma}}^{-1} \text{diag}(\hat{\mathbf{w}}_{\theta})$
+\subsubsection*{Update $w_{\theta_{l}}$}
+The phase difference of the newly acquired \acs{SAR} image is obtained by solving the following sub-problem
+\begin{equation}
+\label{Equation:problem4}
+\begin{aligned}
+\min_{w_{\theta_l}} \quad & \mathcal{L}_G(w_{\theta_{l}}) \quad \text{s.t.} \quad & |w_{\theta_{l}}| = 1, \; \theta_1 = 0 
+\end{aligned}
+\end{equation}
+As a result, the phase difference of the newly acquired images takes the following form
+\vspace{-10pt} 
+\begin{equation}
+\label{Equation:new_phase}
+\small w_{\theta_l} = \small \frac{\Big( \big(\sum_{i=1}^n x_{l}^{i} \mathbf{L}^i \boldsymbol{\gamma}^T \big) . \big(\sum_{i=1}^n \boldsymbol{\gamma} \mathbf{M}^i \boldsymbol{\gamma}^T \big)^{-1}\Big)}{|| \Big( \big(\sum_{i=1}^n x_{l}^{i} \mathbf{L}^i \boldsymbol{\gamma}^T \big) . \big(\sum_{i=1}^n \boldsymbol{\gamma} \mathbf{M}^i \boldsymbol{\gamma}^T \big)^{-1}\Big) ||}
+\end{equation}
+\begin{algorithm}
+\setstretch{0.5} 
+\caption{\ac{BCD} algorithm }
+\label{Algorithm:algo_BCD}
+\begin{algorithmic}[1]
+\State \textbf{Input}: Samples $\{\mathbf{\tilde{x}}^i\}_{i=1}^n$, $\hat{\mathbf{\Sigma}}$, $\text{diag}(\hat{\mathbf{w}}_{\theta})$
+% \State Computation of $\mathbf{S} =$ \acs{SCM}
+\Repeat
+    \State Update of $\boldsymbol{\gamma}$ with (\ref{Equation:gamma_vector})
+    \State Update of $\gamma_{l}$ with (\ref{Equation:gamma_scalar})
+    \State Update of $w_{\theta_{l}}$ with (\ref{Equation:new_phase})
+\Until{convergence}
+\State \textbf{Output}: $\boldsymbol{\gamma}$, $\gamma_{l}$ and $w_{\theta_{l}}$
+\end{algorithmic}
+\end{algorithm}

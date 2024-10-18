@@ -1,9 +1,13 @@
+# -------------------------------------------------------------
+# Packages
+# -------------------------------------------------------------
 import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from src.generation import phasegeneration, simulateCov
 from src.utility import ToeplitzMatrix, calculateMSE
-from exp.simulation import parallel_Monte_Carlo
+
+from simulation import parallel_Monte_Carlo
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -115,20 +119,16 @@ if __name__ == "__main__":
     C_tilde_sequential = [[] for i in range(len(args.n_list))] 
 
     for key, value in enumerate(args.n_list):
-        delta_phases_MLEPL[key], 
-        delta_phases_classic_PL[key] , 
-        delta_2p_insar[key], 
-        new_phase_sequential[key], 
-        C_tilde_sequential[key] = parallel_Monte_Carlo(args.p, 
-                                                       value, 
-                                                       trueCov, 
-                                                       args.sampledist, 
-                                                       args.rank, 
-                                                       args.argsMLEPL, 
-                                                       args.n_trials, 
-                                                       args.n_threads, 
-                                                       args.tol, 
-                                                       args.Multi)
+        delta_phases_MLEPL[key], delta_phases_classic_PL[key] , delta_2p_insar[key], new_phase_sequential[key], C_tilde_sequential[key] = parallel_Monte_Carlo(args.p, 
+                                                                                                                                                               value, 
+                                                                                                                                                               trueCov, 
+                                                                                                                                                               args.sampledist, 
+                                                                                                                                                               args.rank, 
+                                                                                                                                                               args.argsMLEPL, 
+                                                                                                                                                               args.n_trials, 
+                                                                                                                                                               args.n_threads, 
+                                                                                                                                                               args.tol, 
+                                                                                                                                                               args.Multi)
         
     # MSE computation for the last date for different approaches
     MSE_delta_phases_MLEPL = calculateMSE(np.array(delta_phases_MLEPL)[:, :, args.p], 
@@ -152,13 +152,28 @@ if __name__ == "__main__":
     plt.figure()
     plt.xlabel('n')
     plt.ylabel('MSE')
-    plt.plot(args.n_list, MSE_delta_phases_sequential,'o-', color ='blue', label = 'S-MLE-PL')
-    plt.plot(args.n_list, MSE_delta_phases_MLEPL,'v-', color ='g', label = 'MLE-PL')
-    plt.plot(args.n_list, MSE_delta_phases_classic_PL,'|-', color ='red', label = 'classic PL')
-    plt.plot(args.n_list, MSE_delta_2p_insar,'o-', color ='pink', label = '2p-InSAR')
+    plt.plot(args.n_list, 
+             MSE_delta_phases_sequential,
+             'o-', 
+             color ='blue', 
+             label = 'S-MLE-PL')
+    plt.plot(args.n_list,
+             MSE_delta_phases_MLEPL,
+             'v-', 
+             color ='g', 
+             label = 'MLE-PL')
+    plt.plot(args.n_list, 
+             MSE_delta_phases_classic_PL,
+             '|-',
+             color ='red', 
+             label = 'classic PL')
+    plt.plot(args.n_list, 
+             MSE_delta_2p_insar,
+             'o-', color ='pink', 
+             label = '2p-InSAR')
     plt.legend()
     plt.grid("True")
-    plt.title('At date '+str(args.l)+', Gaussian model, p+1='+str(p+1)+', rho='+str(args.rho))
+    plt.title('At date '+str(args.l)+', Gaussian model, p+1='+str(args.p+1)+', rho='+str(args.rho))
     plt.show()
     
     # histogram outputs for n_samples[3]

@@ -8,8 +8,10 @@ from functools import partial
 from tqdm import tqdm
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
-from src.estimation import extractMLEfunc, SCM
-from optimization import S_G_MLE_PL_BCD
+from src.estimation import (
+	extractMLEfunc, 
+	SCM)
+from src.optimization import S_G_MLE_PL_BCD
 
 def extraire_numero_fichier(nom_fichier):
     return int(nom_fichier.split('_')[-1].split('.data')[0])

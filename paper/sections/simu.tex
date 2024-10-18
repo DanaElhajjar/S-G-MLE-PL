@@ -1,0 +1,29 @@
+\vspace{-5pt} 
+\section{SIMULATIONS}
+\vspace{-5pt} 
+%\vspace{-7pt} 
+\label{sec:simulations}
+\subsection{Simulation parameters}
+We simulate a time series of size $l = p+1 = 20$ images. The real core of the covariance matrix  $\mathbf{\tilde{\Psi}}$ is simulated as a Toeplitz matrix i.e.,  $[ \mathbf{\tilde{\Psi}}]_{ij} = \rho^{|i-j|}$ with a coefficient correlation $\rho = 0.7$. $\boldsymbol{\gamma}$ corresponds to the last raw of this matrix and $\gamma_l$ the scalar at $(l, l)$ position. Phases differences vary linearly between $0$ and $2$ rad, i.e., $\Delta_{i, i-1} = \theta_i - \theta_{i-1} = 2/l$ rad.  The covariance matrix is then obtained according to (\ref{cov_mat_struc}) with which we simulate $n$ \ac{i.i.d} samples according to the \acs{CCG}, $\mathbf{\tilde{x}}^i \sim \mathcal{N}(0,\, \mathbf{\tilde{\Sigma}})$. 
+We compare the results of our approach with those obtained from other state-of-the-art approaches: $2$-pass \acs{InSAR} designated hereinafter by $2$p-InSAR, which is equivalent to an interferogram between $2$ images, standard \acs{PL} \citep{cao2015mathematical} and \ac{MLEPL} \citep{vu2022new}. \ac{MSE} are computed using $1000$ Monte Carlo trials.
+\vspace{-5pt} 
+\subsection{Simulation results}
+\begin{figure}[ht]
+  \centering
+  \centerline{\epsfig{figure=./imageandplot/rho_0.7.pdf,width=7cm}}
+\vspace{-0.5cm}
+  \caption{\small \acs{MSE} on $w_{\theta_{l}}$ with increasing $n$, $l = 20$, $\rho=0.7$ using $1000$ Monte Carlo trials.}
+\label{fig:MSE-Gaussian}
+\end{figure}
+Fig.~\ref{fig:MSE-Gaussian} represents the \acs{MSE} of the phase difference estimate for the latest \acs{SAR} image when the size of the patch $n$ increases. As expected, the \acs{MSE} decreases as the number of samples increases. 
+%\yy{si possible, expliquer rapidement pourquoi ce gain}
+\begin{figure}[ht]
+  \centering
+  \centerline{\epsfig{figure=./imageandplot/comparison_computation_time_log.pdf,width=7cm}}
+  \caption{\small Comparison of computation time among standard \acs{PL}, \ac{MLEPL} and \ac{SMLEPL}.}
+\label{fig:computation_time}
+\end{figure}
+
+It is worth noting that the sequential estimation of $w_{\theta_{l}}$ provides better results than other considered approaches. At the core of the sequential approach lies the prior estimation of the past using \citep{vu2022new}. Consequently, predicting future outcomes is expected to yield superior results.
+Fig.~\ref{fig:computation_time} presents the computation cost when the length of the time series increases. The primary factor for the heavy computation time of the \acs{PL} approach is the number of involved images. As the number of images increases, the computational cost also rises due to the processing of the coherence matrix whose size corresponds to the number of involved images. Classic approaches deal with matrices of size $(l, l)$ while our approach treats $2$ scalars and a vector of size $p$. 
+The complexity of the offline algorithm is primarily dominated by matrix inversion and \ac{SVD}, which are performed multiple times ($n_{\text{iter}}$ the number of iterations), with a cost of $O(n_{\text{iter}} \, p^3)$. In contrast, the sequential approach requires only one matrix inversion, which amounts to $O(p^3)$.

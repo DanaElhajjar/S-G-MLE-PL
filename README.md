@@ -56,7 +56,7 @@ unzip data.zip data/
 
 ### Authors
 
-* Dana El Hajjar, mail: dana.el-hajjar@univ-smb.fr
+* Dana El Hajjar, mail: dana.el-hajjar@univ-smb.fr, dana.el-hajjar@centralesupelec.fr
 * Yajing Yan, mail: yajing.yan@univ-smb.fr
 * Guillaume Ginolhac, mail: guillaume.ginolhac@univ-smb.fr
 * Mohammed Nabil El Korso, mail: mohammed.nabil.el-korso@centralesupelec.fr

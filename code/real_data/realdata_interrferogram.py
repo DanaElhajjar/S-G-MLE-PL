@@ -8,7 +8,7 @@ import argparse
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser("MSE simulation of the phase difference")
+    parser = argparse.ArgumentParser("Phase difference estimation on real data")
     parser.add_argument("--l", 
                         type=int, 
                         default=20,

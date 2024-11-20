@@ -1,18 +1,27 @@
 from data import *
-from real_data.realdata import process_images
+from realdata import process_images
 from src.utility import writetoENVIformat
 
 import numpy as np
 import matplotlib.pyplot as plt
 import argparse
+import sys
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser("Phase difference estimation on real data")
+    parser = argparse.ArgumentParser("Phase estimation over Mexico City")
     parser.add_argument("--l", 
                         type=int, 
                         default=20,
                         help="Number of time stamps in the time series")
+    parser.add_argument("--rho", 
+                        type=float, 
+                        default=0.7, 
+                        help="Correlation coefficient for Toeplitz coherence matrix")
+    parser.add_argument("--n_trials", 
+                        type=int, 
+                        default=1000, 
+                        help="Number of Monte-Carlo Trials")
     parser.add_argument("--phasecorrectionchoice",
                         type=int, 
                         default=4, 
@@ -53,31 +62,36 @@ if __name__ == "__main__":
                         type=int, 
                         default=-1, 
                         help="The number of threads")
+    parser.add_argument("--maxphase", 
+                        type=int, 
+                        default=2, 
+                        help="The maximum value of the phase")
     parser.add_argument("--window_size",
                         type=int,
                         default=8,
                         help="The size of the window")
-    args = parser.parse_args()
+    # Safely parse known arguments and ignore unknown arguments passed by Jupyter
+    args, unknown = parser.parse_known_args()
 
-    # Parse n values for str
-    args.n_list = [int(x) for x in args.n_list.split(",")]
+    # add `argsMLEPL`
+    args.argsMLEPL = [args.iter_PL, args.iter_max_BCD, args.iter_max_MM, args.phasecorrectionchoice]
 
-    print("Phase difference estimation with parameters:")
+    # add `samplesize`
+    args.samplesize = args.window_size**2
+
+    # Optional: Print parsed arguments to verify
+    print("Parsed arguments:", args)
+
+    print("MSE over size of patch simulation with parameters:")
     for key, val in vars(args).items():
         print(f"  * {key}: {val}")
 
+    args.DataFolder = "./data/" 
 
-if __name__ == "__main__":
-
-    DataFolder = "./data/" 
 
     # interferogram size : (4188, 23887)
 
-    args.n = args.window_size**2
-
-    args.argsMLEPL = (args.iter_PL, args.iter_max_BCD, args.iter_max_MM, args.phasecorrectionchoice)
-
-    output = process_images(DataFolder, args.window_size, args.n_threads, args.n, args.argsMLEPL, args.tol)
+    output = process_images(args.DataFolder, args.window_size, args.n_threads, args.samplesize, args.argsMLEPL, args.tol)
 
     phases_list = []
     C_tilde_list = []
@@ -96,17 +110,15 @@ if __name__ == "__main__":
     for i in range(lenght):
         sigma[i] = Sigma_tilde_array[i, 0, -1]
 
-    Sigma_reshaped = sigma.reshape(609, 1913)  # tailles recuperes du hdr de coherence multilook pour une taille
+    # Sigma_reshaped = sigma.reshape(609, 1913)  # tailles recuperes du hdr de coherence multilook pour une taille
     # overlap 1 pixel : (2435, 7651)
     # overlap 4 pixels : 8- (609, 1913) ((3684-1244)-8) / overlap 3 pixels : # 6- (812, 2551)
 
-    output_filename = "Sigma_sequential_date_20_process=5_windowsize=8.img"
-    writetoENVIformat(output_filename, Sigma_reshaped)
+    output_filename = "Sigma_sequential_date="+str(args.l)+"_n_threads="+str(args.n_threads)+"_windowsize="+str(args.window_size)+".img"
+    writetoENVIformat(output_filename, sigma)
 
-    estimated_inter = phases_array.reshape(609, 1913)   # 6- (698, 3981) 7- (598, 3412) 5- (837, 4777) 8- (523, 2985) # crop : (305,957)
-
-    plt.imshow(estimated_inter, plt.get_cmap('jet'))
+    plt.imshow(phases_array, plt.get_cmap('jet'))
     plt.colorbar()
 
-    output_filename = "phase_sequential_date_20_process=5_windowsize=8.img"
-    writetoENVIformat(output_filename, estimated_inter)
+    output_filename = "phase_sequential_date="+str(args.l)+"_n_threads="+str(args.n_threads)+"_windowsize="+str(args.window_size)+".img"
+    writetoENVIformat(output_filename, phases_array)
